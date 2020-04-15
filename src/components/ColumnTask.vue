@@ -14,22 +14,15 @@
 </template>
 
 <script>
+import dragAndDropMixin from "../mixins/dragAndDropMixin";
 export default {
+  mixins: [dragAndDropMixin],
   props: {
     task: {
       type: Object
     },
-    taskIndex: {},
-    column: {
-      type: Object,
-      required: true
-    },
-    columnIndex: {
+    taskIndex: {
       type: Number,
-      required: true
-    },
-    board: {
-      type: Object,
       required: true
     }
   },
@@ -45,30 +38,6 @@ export default {
       e.dataTransfer.setData("from-task-index", taskIndex);
       e.dataTransfer.setData("from-column-index", fromColumnIndex);
       e.dataTransfer.setData("type", "task");
-    }, // drop task or column depend on type
-    dropTaskOrColumn(e, toTasks, toColumnIndex, toTaskIndex) {
-      const type = e.dataTransfer.getData("type");
-      if (type == "task") {
-        this.dropTask(
-          e,
-          toTasks,
-          toTaskIndex !== undefined ? toTaskIndex : toTasks.length
-        );
-      } else {
-        this.dropAColumn(e, toColumnIndex);
-      }
-    },
-    // drop task in new column or in the same column
-    dropTask(e, toTasks, toTaskIndex) {
-      let fromColumnIndex = e.dataTransfer.getData("from-column-index");
-      let fromTaskIndex = e.dataTransfer.getData("from-task-index");
-      let fromTasks = this.board.columns[fromColumnIndex].tasks;
-      this.$store.commit("MOVE_TASK", {
-        fromTasks,
-        fromTaskIndex,
-        toTasks,
-        toTaskIndex
-      });
     }
   }
 };
