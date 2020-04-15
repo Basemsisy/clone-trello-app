@@ -1,52 +1,75 @@
-import { uuid } from './utils'
+import { uuid } from "./utils";
 
 export default {
-  name: 'workshop',
+  name: "workshop",
   columns: [
     {
-      name: 'todo',
+      name: "todo",
       tasks: [
         {
-          description: '',
-          name: 'first task',
+          description: "aaaaaaaaaaaaaaaaaaaa",
+          name: "first task",
           id: uuid(),
           userAssigned: null
         },
         {
-          description: '',
-          name: 'second task',
+          description: "",
+          name: "second task",
           id: uuid(),
           userAssigned: null
         },
         {
-          description: '',
-          name: 'and thrid',
+          description: "",
+          name: "and thrid",
           id: uuid(),
           userAssigned: null
         }
       ]
     },
     {
-      name: 'in-progress',
+      name: "todo",
       tasks: [
         {
-          description: '',
-          name: 'first task',
+          description: "",
+          name: "first task",
+          id: uuid(),
+          userAssigned: null
+        },
+        {
+          description: "",
+          name: "second task",
+          id: uuid(),
+          userAssigned: null
+        },
+        {
+          description: "",
+          name: "and thrid",
           id: uuid(),
           userAssigned: null
         }
       ]
     },
     {
-      name: 'done',
+      name: "in-progress",
       tasks: [
         {
-          description: '',
-          name: 'first task',
+          description: "",
+          name: "first task",
+          id: uuid(),
+          userAssigned: null
+        }
+      ]
+    },
+    {
+      name: "done",
+      tasks: [
+        {
+          description: "",
+          name: "first task",
           id: uuid(),
           userAssigned: null
         }
       ]
     }
   ]
-}
+};
