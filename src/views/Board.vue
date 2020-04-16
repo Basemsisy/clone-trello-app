@@ -1,31 +1,42 @@
 <template>
-  <div class="board">
-    <div class="flex flex-row items-start">
-      <BoardColumn
-        v-for="(column, $columnIndex) of board.columns"
-        :key="$columnIndex"
-        :column="column"
-        :columnIndex="$columnIndex"
-        :board="board"
-      />
-      <div class="column flex">
-        <input
-          type="text"
-          class="p-2 mr-2 flex-grow"
-          placeholder="new column name"
-          v-model="newColumnName"
-          @keyup.enter="createNewColumn"
+  <div class="board" :style="{backgroundColor: board.boardColor }">
+    <ul class="colors">
+      <li
+        v-for="color in colors"
+        :key="color"
+        @click="changeBoardColor(color)"
+        :style="{backgroundColor: color, borderWidth: color == board.boardColor? '3px': '1px'}"
+      ></li>
+    </ul>
+    <div>
+      <div class="flex flex-row items-start">
+        <BoardColumn
+          v-for="(column, $columnIndex) of board.columns"
+          :key="$columnIndex"
+          :column="column"
+          :columnIndex="$columnIndex"
+          :board="board"
         />
+        <div class="column flex">
+          <input
+            type="text"
+            class="p-2 mr-2 flex-grow"
+            placeholder="new column name"
+            v-model="newColumnName"
+            @keyup.enter="createNewColumn"
+          />
+        </div>
       </div>
-    </div>
-    <div class="task-bg" v-if="isTaskOpen" @click.self="goBack">
-      <router-view></router-view>
+      <div class="task-bg" v-if="isTaskOpen" @click.self="goBack">
+        <router-view></router-view>
+      </div>
     </div>
   </div>
 </template>
 
 <script>
 import BoardColumn from "../components/BoardColumn";
+import boardColors from "../boardColors";
 /*eslint-disable*/
 import { mapState } from "vuex";
 export default {
@@ -34,6 +45,11 @@ export default {
     ...mapState(["board"]),
     isTaskOpen() {
       return this.$route.name == "task";
+    }
+  },
+  created() {
+    if (!this.board) {
+      this.$router.push("/create");
     }
   },
   methods: {
@@ -47,11 +63,15 @@ export default {
         name: this.newColumnName
       });
       this.newColumnName = "";
+    },
+    changeBoardColor(color) {
+      this.$store.commit("CHANGE_BOARD_COLOR", { newColor: color });
     }
   },
   data() {
     return {
-      newColumnName: ""
+      newColumnName: "",
+      colors: boardColors
     };
   }
 };
@@ -59,11 +79,23 @@ export default {
 
 <style lang="css">
 .board {
-  @apply p-4 bg-teal-dark h-full overflow-auto;
+  @apply p-4  h-full overflow-auto;
 }
 
 .task-bg {
   @apply pin absolute;
   background: rgba(0, 0, 0, 0.5);
+}
+.colors {
+  display: flex;
+  justify-content: center;
+}
+.colors li {
+  display: inline-block;
+  margin: 20px;
+  border-radius: 50%;
+  width: 2rem;
+  height: 2rem;
+  /* border: 1px solid snow; */
 }
 </style>

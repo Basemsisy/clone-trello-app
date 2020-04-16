@@ -6,12 +6,14 @@ import { saveStatePlugin, uuid } from "./utils";
 
 Vue.use(Vuex);
 
-const board = JSON.parse(localStorage.getItem("board")) || defaultBoard;
+const board = JSON.parse(localStorage.getItem("board"));
+const boards = defaultBoard;
 
 export default new Vuex.Store({
   plugins: [saveStatePlugin],
   state: {
-    board
+    board,
+    boards
   },
   getters: {
     getTask(state) {
@@ -27,6 +29,9 @@ export default new Vuex.Store({
     }
   },
   mutations: {
+    CREATE_BOARD(state, { name }) {
+      state.board = { name: name, columns: [], boardColor: "#0fb9b1" };
+    },
     CREATE_TASK(state, { tasks, name }) {
       tasks.push({ name, id: uuid(), description: "" });
     },
@@ -47,6 +52,9 @@ export default new Vuex.Store({
       const columnList = state.board.columns;
       let columnToMove = columnList.splice(fromColumnIndex, 1)[0];
       columnList.splice(toColumnIndex, 0, columnToMove);
+    },
+    CHANGE_BOARD_COLOR(state, { newColor }) {
+      state.board.boardColor = newColor;
     }
   }
 });
