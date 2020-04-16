@@ -47,11 +47,7 @@ export default {
       return this.$route.name == "task";
     }
   },
-  created() {
-    if (!this.board) {
-      this.$router.push("/create");
-    }
-  },
+
   methods: {
     // this function close the task
     goBack() {

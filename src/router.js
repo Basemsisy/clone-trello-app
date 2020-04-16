@@ -6,16 +6,23 @@ import CreateBoard from "./views/CreateBoard.vue";
 import Boards from "./views/Boards.vue";
 Vue.use(Router);
 
-export default new Router({
+const router = new Router({
   mode: "history",
   base: process.env.BASE_URL,
   routes: [
     { path: "/boards", name: "boards", component: Boards },
-    { path: "/create", name: "create", component: CreateBoard },
+    {
+      path: "/create",
+      name: "create",
+      component: CreateBoard,
+
+      meta: { requiersBoard: false }
+    },
     {
       path: "/",
       name: "board",
       component: Board,
+      meta: { requiersBoard: true },
       children: [
         {
           path: "task/:id",
@@ -25,4 +32,19 @@ export default new Router({
       ]
     }
   ]
+});
+export default router;
+
+router.beforeEach((to, from, next) => {
+  let board = localStorage.getItem("board");
+  if (to.matched.some(record => record.meta.requiersBoard) && !board) {
+    next("/create");
+  } else {
+    next();
+  }
+  if (to.matched.some(record => !record.meta.requiersBoard) && board) {
+    next("/");
+  } else {
+    next();
+  }
 });
